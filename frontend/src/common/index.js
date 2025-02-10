@@ -1,4 +1,4 @@
-const backendDomin = "http://localhost:8080"
+const backendDomin = "https://sparksage-1-c7jo.onrender.com"
 
 const SummaryApi = {
     signUP : {
