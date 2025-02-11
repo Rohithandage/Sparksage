@@ -1,4 +1,4 @@
-const backendDomin = "sparksage-production.up.railway.app"
+const backendDomin = "https://sparksage-1-c7jo.onrender.com"
 
 const SummaryApi = {
     signUP : {
