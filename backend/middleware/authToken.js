@@ -1,45 +1,41 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
-async function authToken(req, res, next) {
-    try {
-        // Ensure cookies are being received
-        const token = req.cookies?.token;
+async function authToken(req,res,next){
+    try{
+        const token = req.cookies?.token
 
-        console.log("Received Token:", token);
-
-        if (!token) {
-            return res.status(401).json({  // Change 200 to 401 (Unauthorized)
-                message: "Please Login...!",
-                error: true,
-                success: false
-            });
+        console.log("token",token)
+        if(!token){
+            return res.status(200).json({
+                message : "Please Login...!",
+                error : true,
+                success : false
+            })
         }
 
-        jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, decoded) => {
-            if (err) {
-                console.log("JWT Verification Error:", err);
-                return res.status(403).json({  // 403 (Forbidden) if token is invalid
-                    message: "Invalid Token!",
-                    error: true,
-                    success: false
-                });
+        jwt.verify(token, process.env.TOKEN_SECRET_KEY, function(err, decoded) {
+            console.log(err)
+            console.log("decoded",decoded)
+            
+            if(err){
+                console.log("error auth", err)
             }
 
-            console.log("Decoded Token:", decoded);
+            req.userId = decoded?._id
 
-            req.userId = decoded?._id; // Ensure decoded contains _id
-
-            next(); // Move to the next middleware
+            next()
         });
 
-    } catch (err) {
-        res.status(500).json({ // 500 for server errors
-            message: err.message || "Internal Server Error",
-            data: [],
-            error: true,
-            success: false
-        });
+
+    }catch(err){
+        res.status(400).json({
+            message : err.message || err,
+            data : [],
+            error : true,
+            success : false
+        })
     }
 }
 
-module.exports = authToken;
+
+module.exports = authToken
